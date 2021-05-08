@@ -12,7 +12,7 @@ class PasswordValidatorTest {
     @Test
     @DisplayName("Method should check for a specific length of the given password")
 
-    public void passwordLength(){
+    public void passwordLengthTest(){
 
         // Given
         String testPassword = "strongPassword112";
@@ -34,7 +34,7 @@ class PasswordValidatorTest {
             "weakPw, false",
             "$$$deklmNop, false"
     })
-    public void passwordContainsDigits(String testPassword, boolean expectedResult){
+    public void passwordContainsDigitsTest(String testPassword, boolean expectedResult){
 
         // When
 
@@ -45,6 +45,40 @@ class PasswordValidatorTest {
         assertEquals(expectedResult, actualDigits);
 
     }
+
+    @ParameterizedTest(name="Method should check if the given password has lower or upper case letters {0} should give {1}")
+    @CsvSource({"strongPassword112, true",
+            "weakPw, true",
+            "$$$deklmnop, false"})
+    public void passwordContainsLowerOrHigherCaseTest(String testPassword, boolean expectedResult){
+
+        // When
+
+        boolean actualLowerHigher = PasswordValidator.passwordContainsLowerHigher(testPassword);
+
+        // Then
+
+        assertEquals(expectedResult, actualLowerHigher);
+
+    }
+
+    @ParameterizedTest(name="Method should check if the given password is valid {0} should give {1}")
+    @CsvSource({"strongPassword112, true",
+            "weakPw, false",
+            "$$$deklmnop, false"})
+    public void isValidPasswordTest(String testPassword, boolean expectedResult){
+
+        // When
+
+        boolean actualPassword = PasswordValidator.isValidPassword(testPassword);
+
+        // Then
+
+        assertEquals(expectedResult, actualPassword);
+
+    }
+
+
 
 
 
