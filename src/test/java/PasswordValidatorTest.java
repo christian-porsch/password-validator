@@ -1,7 +1,11 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +53,7 @@ class PasswordValidatorTest {
     @ParameterizedTest(name="Method should check if the given password has lower or upper case letters {0} should give {1}")
     @CsvSource({"strongPassword112, true",
             "weakPw, true",
-            "$$$deklmnop, false"})
+            "$$$deklmnop, true"})
     public void passwordContainsLowerOrHigherCaseTest(String testPassword, boolean expectedResult){
 
         // When
@@ -78,8 +82,25 @@ class PasswordValidatorTest {
 
     }
 
+    @ParameterizedTest(name="Method should check if the given array of passwords is valid {0} should give {1}")
+    @MethodSource("providePasswordAndResult")
 
+    public void isValidPasswortListTest(String[] testPasswordList, boolean expected){
 
+        // When
 
+        boolean actualPasswordList = PasswordValidator.isValidPasswordList(testPasswordList);
 
+        // Then
+
+        assertEquals(expected, actualPasswordList);
+
+    }
+
+    private static List<Arguments> providePasswordAndResult() {
+        return List.of(
+                Arguments.of(new String[]{"strongPassword112", "sTRongPassword112", "strongPASSWORD112"}, true),
+                Arguments.of(new String[]{"weakPw", "$$$deklmnop", "SUPERSTRONGPW"}, false)
+                );
+    }
 }
